@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Change Calculator</title>
+    <link href="./style.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="container">
+        <a class="back-link" href="index.html">← Back to Home</a>
+        <h3>Change Calculator</h3>
+        <div>
+            <label>Please enter your amount: </label>
+            <input id="amountInput" type="number" placeholder="e.g. 1000.00" />
+            <button id="calculate-btn">Calculate Changes</button>
+        </div>
+        <div id="change-results"></div>
+    </div>
+
+    <script>
+        const amountInput = document.getElementById('amountInput');
+        const calculateBtn = document.getElementById('calculate-btn');
+        const changeResults = document.getElementById('change-results');
+        const denominations = [1000, 500, 100, 50, 20, 10, 5, 2, 1, 0.5];
+
+        calculateBtn.onclick = function() {
+            let amount = parseFloat(amountInput.value);
+
+            if (isNaN(amount) || amount <= 0) {
+                changeResults.innerHTML = '<p class="error">Please enter a valid positive number.</p>';
+                return;
+            }
+
+            changeResults.innerHTML = '';
+
+            for (const d of denominations) {
+                let count = Math.floor(amount / d);
+
+                if (count > 0) {
+                    const p = document.createElement('p');
+                    p.className = 'result-item';
+                    p.textContent = `${d} Baht : ${count}`;
+                    changeResults.appendChild(p);
+                    requestAnimationFrame(() => p.classList.add('visible'));
+                    amount %= d;
+                }
+            }
+
+            if (!changeResults.hasChildNodes()) {
+                changeResults.innerHTML = '<p class="error">No change required for this amount.</p>';
+            }
+        }
+    </script>
+</body>
+</html>

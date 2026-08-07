@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Distance Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a class="back-link" href="index.html">← Back to hub</a>
+        </nav>
+        <h1>Distance Calculator</h1>
+        <p>Use your current location and destination coordinates to calculate the distance.</p>
+
+        <div class="label-row">
+            <button id="locate-btn" type="button">Use current location</button>
+        </div>
+
+        <div class="label-row">
+            <label for="current-lat">Current latitude</label>
+            <input id="current-lat" type="text" readonly>
+        </div>
+
+        <div class="label-row">
+            <label for="current-lng">Current longitude</label>
+            <input id="current-lng" type="text" readonly>
+        </div>
+
+        <div class="label-row">
+            <label for="dest-lat">Destination latitude</label>
+            <input id="dest-lat" type="number" step="any" placeholder="e.g. 19.0760">
+        </div>
+
+        <div class="label-row">
+            <label for="dest-lng">Destination longitude</label>
+            <input id="dest-lng" type="number" step="any" placeholder="e.g. 72.8777">
+        </div>
+
+        <div class="label-row">
+            <label for="unit">Distance unit</label>
+            <select id="unit">
+                <option value="km">Kilometers</option>
+                <option value="mi">Miles</option>
+            </select>
+        </div>
+
+        <button id="calculate-btn" type="button">Calculate distance</button>
+
+        <div id="distance-result" class="output">Distance result appears here.</div>
+    </div>
+
+    <script>
+        const locateBtn = document.getElementById('locate-btn');
+        const calculateBtn = document.getElementById('calculate-btn');
+        const currentLat = document.getElementById('current-lat');
+        const currentLng = document.getElementById('current-lng');
+        const destLat = document.getElementById('dest-lat');
+        const destLng = document.getElementById('dest-lng');
+        const unitSelect = document.getElementById('unit');
+        const resultBox = document.getElementById('distance-result');
+
+        let currentPosition = null;
+
+        function setResult(message, success = true) {
+            resultBox.textContent = message;
+            resultBox.className = success ? 'output success' : 'output error';
+        }
+
+        function updateCurrentFields(position) {
+            currentPosition = position;
+            currentLat.value = position.coords.latitude.toFixed(6);
+            currentLng.value = position.coords.longitude.toFixed(6);
+            setResult('Current location saved. Enter destination coordinates and calculate distance.');
+        }
+
+        function handleLocationError(error) {
+            const message = {
+                1: 'Permission denied. Allow location access to use this tool.',
+                2: 'Position unavailable. Try again in a moment.',
+                3: 'Location request timed out. Please try again.'
+            }[error.code] || 'Unable to get current location.';
+            setResult(message, false);
+        }
+
+        function toRadians(value) {
+            return value * Math.PI / 180;
+        }
+
+        function getDistance(lat1, lng1, lat2, lng2) {
+            const earthRadiusKm = 6371;
+            const dLat = toRadians(lat2 - lat1);
+            const dLng = toRadians(lng2 - lng1);
+            const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) * Math.sin(dLng / 2) ** 2;
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return earthRadiusKm * c;
+        }
+
+        locateBtn.addEventListener('click', () => {
+            if (!navigator.geolocation) {
+                setResult('Geolocation is not supported by this browser.', false);
+                return;
+            }
+            setResult('Requesting current location...');
+            navigator.geolocation.getCurrentPosition(updateCurrentFields, handleLocationError, {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 60000
+            });
+        });
+
+        calculateBtn.addEventListener('click', () => {
+            const current = currentPosition;
+            const destLatValue = parseFloat(destLat.value);
+            const destLngValue = parseFloat(destLng.value);
+
+            if (!current) {
+                setResult('Please allow current location first.', false);
+                return;
+            }
+            if (Number.isNaN(destLatValue) || Number.isNaN(destLngValue)) {
+                setResult('Enter valid destination latitude and longitude.', false);
+                return;
+            }
+            const distanceKm = getDistance(current.coords.latitude, current.coords.longitude, destLatValue, destLngValue);
+            const unit = unitSelect.value;
+            const distance = unit === 'mi' ? distanceKm * 0.621371 : distanceKm;
+            const unitLabel = unit === 'mi' ? 'miles' : 'kilometers';
+            setResult(`Distance: ${distance.toFixed(2)} ${unitLabel}.`);
+        });
+    </script>
+</body>
+</html>

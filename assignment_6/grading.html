@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grading System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <a class="back-link" href="index.html">← Back to Home</a>
+        <h1>Grading System</h1>
+
+        <label for="myanmar">Myanmar</label>
+        <input id="myanmar" type="number" min="0" max="100" placeholder="Enter Myanmar marks">
+
+        <label for="english">English</label>
+        <input id="english" type="number" min="0" max="100" placeholder="Enter English marks">
+
+        <label for="mathematics">Mathematic</label>
+        <input id="mathematics" type="number" min="0" max="100" placeholder="Enter Mathematics marks">
+
+        <label for="chemistry">Chemistry</label>
+        <input id="chemistry" type="number" min="0" max="100" placeholder="Enter Chemistry marks">
+
+        <label for="physics">Physic</label>
+        <input id="physics" type="number" min="0" max="100" placeholder="Enter Physic marks">
+
+        <label for="biology">Biology</label>
+        <input id="biology" type="number" min="0" max="100" placeholder="Enter Biology marks">
+
+        <button id="grade-btn">Calculate Grade</button>
+
+        <section class="grade-legend">
+            <h2>Grade ranges</h2>
+            <ul>
+                <li>240–259 = D-</li>
+                <li>260–279 = D</li>
+                <li>280–299 = D+</li>
+                <li>300–319 = C-</li>
+                <li>320–339 = C</li>
+                <li>340–359 = C+</li>
+                <li>360–379 = B-</li>
+                <li>380–399 = B</li>
+                <li>400–419 = A-</li>
+                <li>420–439 = A</li>
+                <li>440–459 = A+</li>
+                <li>460–479 = S-</li>
+                <li>480–499 = S</li>
+                <li>500+ = S+</li>
+            </ul>
+        </section>
+
+        <div id="output" class="output"></div>
+    </div>
+
+    <script>
+        const subjects = [
+            { id: 'myanmar', name: 'Myanmar', threshold: 75 },
+            { id: 'english', name: 'English', threshold: 75 },
+            { id: 'mathematics', name: 'Mathematic', threshold: 80 },
+            { id: 'chemistry', name: 'Chemistry', threshold: 80 },
+            { id: 'physics', name: 'Physic', threshold: 80 },
+            { id: 'biology', name: 'Biology', threshold: 80 }
+        ];
+
+        const gradeBtn = document.getElementById('grade-btn');
+        const output = document.getElementById('output');
+
+        function formatMark(value) {
+            return Number.isInteger(value) ? value : value.toFixed(2);
+        }
+
+        function getInputValue(id) {
+            const input = document.getElementById(id);
+            return Number(input.value);
+        }
+
+        function getGradeFromTotal(total) {
+            if (total < 240) return 'F';
+            if (total < 260) return 'D-';
+            if (total < 280) return 'D';
+            if (total < 300) return 'D+';
+            if (total < 320) return 'C-';
+            if (total < 340) return 'C';
+            if (total < 360) return 'C+';
+            if (total < 380) return 'B-';
+            if (total < 400) return 'B';
+            if (total < 420) return 'A-';
+            if (total < 440) return 'A';
+            if (total < 460) return 'A+';
+            if (total < 480) return 'S-';
+            if (total < 500) return 'S';
+            return 'S+';
+        }
+
+        gradeBtn.addEventListener('click', () => {
+            const marks = {};
+            let invalid = false;
+            let hasFailSubject = false;
+            let total = 0;
+
+            subjects.forEach(subject => {
+                const value = getInputValue(subject.id);
+
+                if (Number.isNaN(value) || value < 0 || value > 100) {
+                    invalid = true;
+                }
+
+                if (value < 40) {
+                    hasFailSubject = true;
+                }
+
+                marks[subject.id] = value;
+                total += value;
+            });
+
+            if (invalid) {
+                output.textContent = 'Please enter valid marks between 0 and 100 for all subjects.';
+                output.className = 'output error';
+                return;
+            }
+
+            if (total > 600) {
+                output.textContent = 'Total cannot exceed 600. Check your marks again.';
+                output.className = 'output error';
+                return;
+            }
+
+            const distinctionDetails = subjects.map(subject => {
+                const mark = marks[subject.id];
+                const hasDistinction = mark >= subject.threshold;
+                return `<p><strong>${subject.name}</strong>: ${formatMark(mark)} - ${hasDistinction ? 'Distinction' : 'No distinction'}</p>`;
+            }).join('');
+
+            const distinctionCount = subjects.reduce((count, subject) => {
+                return count + (marks[subject.id] >= subject.threshold ? 1 : 0);
+            }, 0);
+
+            let grade;
+            let statusMessage;
+
+            if (hasFailSubject || total < 240) {
+                grade = 'F';
+                statusMessage = 'The student fails the exam because one or more subjects are below 40 or total is below 240.';
+            } else {
+                grade = getGradeFromTotal(total);
+                statusMessage = grade === 'S+'
+                    ? 'Excellent! You achieved the highest grade.'
+                    : `Your grade is ${grade}.`;
+            }
+
+            output.innerHTML = `
+                <div>
+                    <h2>Marks Summary</h2>
+                    ${distinctionDetails}
+                    <p><strong>Total marks:</strong> ${formatMark(total)}</p>
+                    <p><strong>Grade:</strong> ${grade}</p>
+                    <p><strong>Distinctions:</strong> ${distinctionCount}</p>
+                    <p>${statusMessage}</p>
+                </div>
+            `;
+            output.className = hasFailSubject || total < 240 ? 'output error' : 'output success';
+        });
+    </script>
+</body>
+</html>

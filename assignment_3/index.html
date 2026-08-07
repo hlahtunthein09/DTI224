@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit Converter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Unit Converter</h1>
+
+    <label>Enter Value</label>
+    <input type="number" id="value">
+
+    <label>From</label>
+    <select id="from">
+        <option value="inch">Inch</option>
+        <option value="feet">Feet</option>
+        <option value="mm">Millimeter</option>
+        <option value="cm">Centimeter</option>
+        <option value="m">Meter</option>
+        <option value="km">Kilometer</option>
+        <option value="mile">Mile</option>
+    </select>
+
+    <label>To</label>
+    <select id="to">
+        <option value="inch">Inch</option>
+        <option value="feet">Feet</option>
+        <option value="mm">Millimeter</option>
+        <option value="cm">Centimeter</option>
+        <option value="m">Meter</option>
+        <option value="km">Kilometer</option>
+        <option value="mile">Mile</option>
+    </select>
+
+    <button onclick="convert()">Convert</button>
+
+    <h2 id="result">Result :</h2>
+
+</div>
+
+<script>
+    function convert(){
+
+        const value = Number(document.getElementById("value").value);
+
+        const from = document.getElementById("from").value;
+
+        const to = document.getElementById("to").value;
+
+        let meter;
+
+        // Convert everything to Meter first
+
+        if(from == "inch"){
+            meter = value * 0.0254;
+        }
+        else if(from == "feet"){
+            meter = value * 0.3048;
+        }
+        else if(from == "mm"){
+            meter = value / 1000;
+        }
+        else if(from == "cm"){
+            meter = value / 100;
+        }
+        else if(from == "m"){
+            meter = value;
+        }
+        else if(from == "km"){
+            meter = value * 1000;
+        }
+        else if(from == "mile"){
+            meter = value * 1609.344;
+        }
+
+        let answer;
+
+        // Convert Meter to Selected Unit
+
+        if(to == "inch"){
+            answer = meter / 0.0254;
+        }
+        else if(to == "feet"){
+            answer = meter / 0.3048;
+        }
+        else if(to == "mm"){
+            answer = meter * 1000;
+        }
+        else if(to == "cm"){
+            answer = meter * 100;
+        }
+        else if(to == "m"){
+            answer = meter;
+        }
+        else if(to == "km"){
+            answer = meter / 1000;
+        }
+        else if(to == "mile"){
+            answer = meter / 1609.344;
+        }
+
+        document.getElementById("result").textContent =
+            "Result : " + value + " " + from + " = " + answer.toFixed(4) + " " + to;
+
+    }
+</script>
+
+</body>
+</html>
