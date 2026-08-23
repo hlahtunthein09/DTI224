@@ -2,11 +2,25 @@
   "name": "DTI224 Utilities Hub",
   "short_name": "Utilities Hub",
   "description": "A collection of practical calculators and converters.",
+  "id": "./",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#eef2fb",
   "theme_color": "#2563eb",
-  "icons": []
+  "icons": [
+    {
+      "src": "./icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
 }
