@@ -1,10 +1,10 @@
-const CACHE_NAME = 'dti224-utilities-v2';
+const CACHE_NAME = 'dti224-utilities-v3';
 const APP_FILES = [
     './',
     './index.html',
     './manifest.webmanifest',
-    './icons/icon-192.svg',
-    './icons/icon-512.svg',
+    './icons/icon-192.png',
+    './icons/icon-512.png',
     './assignment_6/index.html',
     './assignment_6/style.css',
     './assignment_6/unit_converter.html',
