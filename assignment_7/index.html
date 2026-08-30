@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Job Kanban Board</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Career tracker</p>
+          <h1>Job Search Board</h1>
+        </div>
+        <div class="legend">
+          <span class="legend-dot high"></span>
+          <span>High priority</span>
+        </div>
+      </header>
+
+      <main class="board" aria-label="Kanban board">
+        <section class="column" data-status="found-jobs">
+          <div class="column-header">
+            <h2>Found jobs</h2>
+            <span class="count" id="count-found-jobs">0</span>
+          </div>
+          <div class="dropzone" id="found-jobs"></div>
+        </section>
+
+        <section class="column" data-status="applied">
+          <div class="column-header">
+            <h2>Applied</h2>
+            <span class="count" id="count-applied">0</span>
+          </div>
+          <div class="dropzone" id="applied"></div>
+        </section>
+
+        <section class="column" data-status="interview">
+          <div class="column-header">
+            <h2>Interview</h2>
+            <span class="count" id="count-interview">0</span>
+          </div>
+          <div class="dropzone" id="interview"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
