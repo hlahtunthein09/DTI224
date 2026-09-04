@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assignment 8 | Member List</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="member-manager">
+      <a class="back-link" href="../index.html">Back to assignments</a>
+      <section class="manager-card" aria-labelledby="page-title">
+        <header>
+          <p class="section-label">Assignment 8</p>
+          <h1 id="page-title">Member list</h1>
+          <p class="intro">Add a name to save it in this browser, or remove a saved member.</p>
+        </header>
+
+        <div class="member-form">
+          <label for="member-name">Member name</label>
+          <div class="controls">
+            <input id="member-name" type="text" placeholder="Enter a member name" autocomplete="off" />
+            <button id="add-member" type="button">Add member</button>
+            <button id="remove-member" class="remove-button" type="button">Remove member</button>
+          </div>
+          <p id="status-message" class="status-message" aria-live="polite"></p>
+        </div>
+
+        <section class="list-section" aria-labelledby="list-title">
+          <h2 id="list-title">Saved members</h2>
+          <ul id="member-list" class="member-list"></ul>
+        </section>
+      </section>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
